@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Cloud 8 Studio — Branding & Graphic Design Dubai</title>
+  <meta name="description" content="Cloud 8 Studio is an Emirati-owned creative agency in Dubai specializing in ethereal branding and minimal graphic design.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Wildborn local fonts (public/assets/...) */
+    @font-face{
+      font-family: 'Wildborn';
+      src: url('assets/wildborn-thin.otf') format('opentype');
+      font-weight: 200;
+      font-display: swap;
+    }
+    @font-face{
+      font-family: 'Wildborn';
+      src: url('assets/wildborn-light.otf') format('opentype');
+      font-weight: 300;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: rgba(255,255,255,.95);
+      --muted: rgba(255,255,255,.55);
+      --glass: rgba(255,255,255,.12);
+      --glass2: rgba(255,255,255,.06);
+      --brand-liquid: #b7c7cf;
+      --brand-ethereal: #d4dee3;
+      --accent-warm: #d7b59b;
+      --dark-bg: #2D424E;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark-bg);
+      overflow-x: hidden;
+      color: var(--ink);
+      cursor: auto;
+    }
+
+    /* CUSTOM CURSOR */
+    #cursor-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--brand-liquid);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    #cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(183,199,207,.4);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.2s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    body:not(.touch) #cursor-dot,
+    body:not(.touch) #cursor-ring {
+      opacity: 1;
+    }
+
+    /* VIDEO BACKGROUND */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -4;
+      overflow: hidden;
+    }
+
+    .video-bg video,
+    .video-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+
+    /* Backdrop overlay */
+    .backdrop {
+      position: fixed;
+      inset: -30%;
+      background: radial-gradient(1400px 900px at var(--x,20%) var(--y,10%), rgba(183,199,207,.2), transparent 65%),
+                  radial-gradient(1100px 800px at calc(100% - var(--x,20%)) calc(100% - var(--y,10%)), rgba(212,222,227,.12), transparent 60%),
+                  linear-gradient(135deg, var(--dark-bg), #22333c);
+      filter: saturate(1.05);
+      z-index: -3;
+      opacity: 0.85;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+      opacity: .18;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .mist {
+      position: fixed;
+      inset: -40%;
+      background: radial-gradient(800px 600px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.08), transparent 65%),
+                  radial-gradient(1000px 800px at calc(100% - var(--mx,50%)) calc(100% - var(--my,50%)), rgba(183,199,207,.08), transparent 68%);
+      filter: blur(60px);
+      opacity: .8;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Floating particles */
+    .particle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: rgba(183,199,207,.25);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      animation: float var(--duration) infinite ease-in-out;
+      animation-delay: var(--delay);
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(var(--tx), var(--ty)) scale(1);
+        opacity: 0;
+      }
+      10% { opacity: .3; }
+      50% {
+        transform: translate(calc(var(--tx) + var(--dx)), calc(var(--ty) + var(--dy))) scale(1.2);
+        opacity: .15;
+      }
+      90% { opacity: .3; }
+    }
+
+    /* Loader Screen */
+    .loader-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--dark-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loader-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .cloud-loader {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 24px;
+    }
+
+    .cloud-particle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--brand-liquid);
+      border-radius: 50%;
+      opacity: 0;
+      animation: cloudForm 2.5s ease-in-out infinite;
+    }
+
+    .cloud-particle:nth-child(1) { animation-delay: 0s; top: 20%; left: 50%; }
+    .cloud-particle:nth-child(2) { animation-delay: 0.3s; top: 40%; left: 30%; }
+    .cloud-particle:nth-child(3) { animation-delay: 0.6s; top: 60%; left: 50%; }
+    .cloud-particle:nth-child(4) { animation-delay: 0.9s; top: 40%; left: 70%; }
+    .cloud-particle:nth-child(5) { animation-delay: 1.2s; top: 80%; left: 50%; }
+
+    @keyframes cloudForm {
+      0%, 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.6; }
+      75% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+    }
+
+    .cloud-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--brand-ethereal);
+      opacity: 0;
+      animation: numberReveal 2.5s ease-in-out infinite;
+      text-shadow: 0 0 40px rgba(183,199,207,0.5);
+    }
+
+    @keyframes numberReveal {
+      0%, 30% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      50%, 70% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    }
+
+    .loader-text {
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: textFade 2.5s ease-in-out infinite;
+    }
+
+    @keyframes textFade {
+      0%, 40% { opacity: 0; transform: translateY(10px); }
+      60%, 80% { opacity: 0.7; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* Glass Card */
+    .glass-card {
+      width: min(480px, 94vw);
+      padding: 56px 44px 40px;
+      border-radius: 40px;
+      background: linear-gradient(135deg, var(--glass) 0%, var(--glass2) 100%);
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 40px 100px rgba(0,0,0,.4), 0 0 80px rgba(183,199,207,.15), inset 0 1px 0 rgba(255,255,255,.2);
+      text-align: center;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px) scale(.96);
+      filter: blur(12px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.loaded .glass-card {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    /* Theme Toggle */
+    .theme-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    #theme-toggle-button {
+      font-size: 17px;
+      position: relative;
+      display: inline-block;
+      width: 4em;
+      cursor: pointer;
+    }
+
+    #toggle {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    #container, #patches, #stars, #button, #sun, #moon, #cloud {
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 0.25s;
+    }
+
+    #toggle:checked + svg #container { fill: #2b4360; }
+    #toggle:checked + svg #button { transform: translate(30.333px, 2.333px); }
+    #sun { opacity: 1; }
+    #toggle:checked + svg #sun { opacity: 0; }
+    #moon { opacity: 0; }
+    #toggle:checked + svg #moon { opacity: 1; }
+    #cloud { opacity: 1; }
+    #toggle:checked + svg #cloud { opacity: 0; }
+    #stars { opacity: 0; }
+    #toggle:checked + svg #stars { opacity: 1; }
+
+    .brand-badge {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), rgba(255,255,255,.08));
+      border: 1.5px solid rgba(255,255,255,.25);
+      box-shadow: 0 15px 35px rgba(0,0,0,.3), 0 0 60px rgba(183,199,207,.25), inset 0 2px 0 rgba(255,255,255,.3);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      position: relative;
+    }
+
+    .brand-badge::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      background: linear-gradient(135deg, var(--brand-liquid), var(--brand-ethereal));
+      border-radius: 50%;
+      opacity: 0;
+      filter: blur(20px);
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
+    .brand-badge:hover { transform: scale(1.08) rotate(5deg); }
+    .brand-badge:hover::before { opacity: 0.4; }
+
+    .brand-badge img {
+      width: 62px;
+      height: 62px;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 0 rgba(255,255,255,.2)) drop-shadow(0 10px 24px rgba(0,0,0,.35));
+                                                    
+      const rotateX = (y - centerY) / 80;
+      const rotateY = (centerX - x) / 80;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+  </script>
+</body>
+</html>
