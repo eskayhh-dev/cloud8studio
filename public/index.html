@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Cloud 8 Studio — Branding & Graphic Design Dubai</title>
-  <meta name="description" content="Cloud 8 Studio is an Emirati-owned creative agency in Dubai specializing in ethereal branding and minimal graphic design.">
+  <meta name="description" content="Cloud 8 Studio is an Emirati-owned creative agency in Dubai specializing in ethereal branding and minimal graphic design." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,16 +14,16 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Wildborn local fonts (public/assets/...) */
+    /* Wildborn local fonts (served from /public/assets) */
     @font-face{
       font-family: 'Wildborn';
-      src: url('assets/wildborn-thin.otf') format('opentype');
+      src: url('/assets/wildborn-thin.otf') format('opentype');
       font-weight: 200;
       font-display: swap;
     }
     @font-face{
       font-family: 'Wildborn';
-      src: url('assets/wildborn-light.otf') format('opentype');
+      src: url('/assets/wildborn-light.otf') format('opentype');
       font-weight: 300;
       font-display: swap;
     }
@@ -81,7 +81,7 @@
       opacity: 1;
     }
 
-    /* VIDEO BACKGROUND */
+    /* BACKGROUND LAYERS */
     .video-bg {
       position: fixed;
       inset: 0;
@@ -89,21 +89,13 @@
       overflow: hidden;
     }
 
-    .video-bg video,
-    .video-bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-    }
-
-    /* Backdrop overlay */
     .backdrop {
       position: fixed;
       inset: -30%;
-      background: radial-gradient(1400px 900px at var(--x,20%) var(--y,10%), rgba(183,199,207,.2), transparent 65%),
-                  radial-gradient(1100px 800px at calc(100% - var(--x,20%)) calc(100% - var(--y,10%)), rgba(212,222,227,.12), transparent 60%),
-                  linear-gradient(135deg, var(--dark-bg), #22333c);
+      background:
+        radial-gradient(1400px 900px at var(--x,20%) var(--y,10%), rgba(183,199,207,.2), transparent 65%),
+        radial-gradient(1100px 800px at calc(100% - var(--x,20%)) calc(100% - var(--y,10%)), rgba(212,222,227,.12), transparent 60%),
+        linear-gradient(135deg, var(--dark-bg), #22333c);
       filter: saturate(1.05);
       z-index: -3;
       opacity: 0.85;
@@ -122,8 +114,9 @@
     .mist {
       position: fixed;
       inset: -40%;
-      background: radial-gradient(800px 600px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.08), transparent 65%),
-                  radial-gradient(1000px 800px at calc(100% - var(--mx,50%)) calc(100% - var(--my,50%)), rgba(183,199,207,.08), transparent 68%);
+      background:
+        radial-gradient(800px 600px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.08), transparent 65%),
+        radial-gradient(1000px 800px at calc(100% - var(--mx,50%)) calc(100% - var(--my,50%)), rgba(183,199,207,.08), transparent 68%);
       filter: blur(60px);
       opacity: .8;
       pointer-events: none;
@@ -263,7 +256,7 @@
       filter: none;
     }
 
-    /* Theme Toggle */
+    /* Theme Toggle (kept minimal; styling can be restored later) */
     .theme-container {
       position: absolute;
       top: 20px;
@@ -276,6 +269,7 @@
       display: inline-block;
       width: 4em;
       cursor: pointer;
+      opacity: .6;
     }
 
     #toggle {
@@ -283,23 +277,6 @@
       width: 0;
       height: 0;
     }
-
-    #container, #patches, #stars, #button, #sun, #moon, #cloud {
-      transition-property: all;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 0.25s;
-    }
-
-    #toggle:checked + svg #container { fill: #2b4360; }
-    #toggle:checked + svg #button { transform: translate(30.333px, 2.333px); }
-    #sun { opacity: 1; }
-    #toggle:checked + svg #sun { opacity: 0; }
-    #moon { opacity: 0; }
-    #toggle:checked + svg #moon { opacity: 1; }
-    #cloud { opacity: 1; }
-    #toggle:checked + svg #cloud { opacity: 0; }
-    #stars { opacity: 0; }
-    #toggle:checked + svg #stars { opacity: 1; }
 
     .brand-badge {
       width: 100px;
@@ -337,16 +314,104 @@
       display: block;
       object-fit: contain;
       filter: drop-shadow(0 2px 0 rgba(255,255,255,.2)) drop-shadow(0 10px 24px rgba(0,0,0,.35));
-                                                    
-      const rotateX = (y - centerY) / 80;
-      const rotateY = (centerX - x) / 80;
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
 
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  <div class="video-bg"></div>
+  <div class="backdrop"></div>
+  <div class="noise"></div>
+  <div class="mist"></div>
+
+  <div class="loader-screen" id="loader-screen">
+    <div class="cloud-loader">
+      <div class="cloud-particle"></div>
+      <div class="cloud-particle"></div>
+      <div class="cloud-particle"></div>
+      <div class="cloud-particle"></div>
+      <div class="cloud-particle"></div>
+      <div class="cloud-number">8</div>
+    </div>
+    <div class="loader-text">Loading</div>
+  </div>
+
+  <div class="glass-card" id="glass-card">
+    <div class="theme-container">
+      <label id="theme-toggle-button" for="toggle" aria-label="Toggle theme">
+        <input type="checkbox" id="toggle" />
+      </label>
+    </div>
+
+    <div class="brand-badge">
+      <img src="/assets/logo.svg" alt="Cloud 8 Studio" loading="eager" decoding="async" />
+    </div>
+
+    <h1 style="font-family: 'Wildborn', system-ui, sans-serif; font-weight: 300; letter-spacing: 0.5px;">Cloud 8</h1>
+    <p style="margin-top: 6px; color: rgba(255,255,255,.65);">Studio</p>
+  </div>
+
+  <script>
+    // touch detection
+    if ('ontouchstart' in window) document.body.classList.add('touch');
+
+    // mouse parallax for background gradients
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.documentElement.style.setProperty('--x', x + '%');
+      document.documentElement.style.setProperty('--y', y + '%');
+      document.documentElement.style.setProperty('--mx', x + '%');
+      document.documentElement.style.setProperty('--my', y + '%');
     });
 
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    // loader -> reveal
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+      const loader = document.getElementById('loader-screen');
+      if (loader) loader.classList.add('hidden');
+
+      // particles
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.setProperty('--duration', (6 + Math.random() * 8) + 's');
+        p.style.setProperty('--delay', (-Math.random() * 10) + 's');
+        p.style.setProperty('--tx', Math.round(Math.random() * window.innerWidth) + 'px');
+        p.style.setProperty('--ty', Math.round(Math.random() * window.innerHeight) + 'px');
+        p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+        p.style.setProperty('--dy', (Math.random() * 120 - 60) + 'px');
+        document.body.appendChild(p);
+      }
     });
+
+    // cursor follow (desktop only)
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (dot && ring && !document.body.classList.contains('touch')) {
+      window.addEventListener('mousemove', (e) => {
+        dot.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
+        ring.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+      });
+    }
+
+    // subtle card tilt
+    const card = document.getElementById('glass-card');
+    if (card) {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const rotateX = (e.clientY - centerY) / 80;
+        const rotateY = (centerX - e.clientX) / 80;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+      });
+    }
   </script>
 </body>
 </html>
